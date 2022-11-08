@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Movie from "./Movie";
+import AddMovie from "./AddMovie";
 
 const MovieList = ()=>{
 
@@ -19,14 +20,22 @@ const MovieList = ()=>{
 
   useEffect(() => {
     fetchMovies();
-  },[])
+  },[movies])
 
   //* fetch data from movies json created by data team
-
+  const handleSubmit = (event, newMovie) => {
+    event.preventDefault();
+    axios.post("/movies",newMovie).then(
+      response => fetchMovies()
+    )
+  };
 
     return (
       <div>
         MovieList
+        <br/>
+        <br/>
+          <AddMovie handleSubmit={handleSubmit} />
         <br/>
         {movies ? 
         movies

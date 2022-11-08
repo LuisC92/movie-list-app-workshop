@@ -1,57 +1,23 @@
-import React, {useEffect, useState} from "react";
-import {useParams, useNavigate} from "react-router-dom"
-import axios from "axios";
+import React, {useState} from 'react'
 
-const MovieDetails = ()=>{
+const AddMovie = ({handleSubmit}) => {
 
-  const [movie, setMovie] = useState()
-  const [editMovie, setEditMovie] = useState({});
-  const params = useParams()
-  const navigate = useNavigate();
-
-  const fetchMovie = () => {
-    axios
-      .get(
-        `/movies/${params.id}`
-      )
-      .then((response) => {
-      
-        setMovie(response.data);
+    const [addMovie, setAddMovie] = useState({
+        title: "",
+        director: "",
+        year: "",
+        color: "",
+        duration: ""
       });
-  };
-
-  const handleChange = (e) => {
-    const newValue = e.target.value;
-    const newName = e.target.name;
-    setEditMovie({ ...editMovie, [newName]: newValue });
-  };
-
-  const editMovieDetails = (e, editMovie)=>{
-    e.preventDefault();
-    axios.put(`/movies/${params.id}`, editMovie)
-    fetchMovie();
-  }
-
-  const deleteMovie =()=>{
-    axios.delete(`/movies/${params.id}`)
-    navigate('/movies');
-  }
-
-  useEffect(() => {
-    fetchMovie();
-  },[])
-  
-    return (
-      <div>
-        <p>title: {movie?.title}</p>
-        <p>director: {movie?.director}</p>
-        <p>year: {movie?.year}</p>
-        <p>duration: {movie?.duration}</p>
-        <p>color: {movie?.color}</p>
-        <button onClick={deleteMovie}>Delete this movie</button>
-        <br/>
-        <br/>
-        <form onSubmit={(e) => editMovieDetails(e, editMovie)}>
+      const handleChange = (e) => {
+        const newValue = e.target.value;
+        const newName = e.target.name;
+        setAddMovie({ ...addMovie, [newName]: newValue });
+      };
+    
+      return (
+        <div>
+          <form onSubmit={(e) => handleSubmit(e, addMovie)}>
             <div>
               <label htmlFor="title">Title</label>
               <input
@@ -111,13 +77,13 @@ const MovieDetails = ()=>{
             </div>
             <div>
               <button type="submit">
-                Edit Movie
+                Submit your Movie
               </button>
             </div>
           </form>
-      </div>
-    );
-  
-}
+          <br/>
+        </div>
+      );
+    };
 
-export default MovieDetails;
+export default AddMovie
